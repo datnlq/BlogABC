@@ -78,8 +78,9 @@ class Posts extends Controller
         
 
         $data = [
-            'title' => $post->title,
-            'body' => $post->body,
+            'post' => $post,
+            'title' => '',
+            'body' => '',
             'titleError' => '',
             'bodyError' => ''
         ];
@@ -89,6 +90,7 @@ class Posts extends Controller
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
             $data = [
+                'id' => $id,
                 'title' => trim($_POST['title']),
                 'body' => trim($_POST['body']),
                 'titleError' => '',
@@ -115,5 +117,23 @@ class Posts extends Controller
         }
 
         $this->view('posts/update', $data);
+    }
+
+    // Delete post
+    public function delete($id)
+    {
+        $post = $this->postModel->findPostById($id);
+        if(!isLoggedIn() && $post->user_id != $_SESSION['user_id'])
+        {
+            header("Location: " . URL_ROOT . "/posts");
+        }
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if($this->postModel->deletePost($id)) {
+                header("Location: " . URL_ROOT . "/posts");
+            } else {
+                die("Something went wrong, please try again!");
+            }
+        }
     }
 }

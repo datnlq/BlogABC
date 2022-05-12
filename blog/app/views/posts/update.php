@@ -14,12 +14,12 @@
     </h1>
 
     <form
-    action="<?php echo URL_ROOT; ?>/posts/update/<?php echo $data['post']->id ?>" method="POST">
+    action="<?php echo URL_ROOT; ?>/posts/update/<?php echo $data['post']->post_id ?>" method="POST">
         <div class="form-item">
             <input
                 type="text"
                 name="title"
-                value="<?php echo $data['post']->title ?>">
+                value="<?php echo $data['post']->post_title ?>">
 
             <span class="invalidFeedback">
                 <?php echo $data['titleError']; ?>
@@ -27,7 +27,7 @@
         </div>
 
         <div class="form-item">
-            <textarea name="body" placeholder="Enter your post..."><?php echo $data['post']->body ?></textarea>
+            <textarea name="body" placeholder="Enter your post..."><?php echo $data['post']->post_body ?></textarea>
 
             <span class="invalidFeedback">
                 <?php echo $data['bodyError']; ?>

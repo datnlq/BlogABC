@@ -10,6 +10,13 @@ class User {
         $this->db->query('SELECT * FROM users');
         return $this->db->resultSet();
     }
+    // Get user by ID
+    public function getUserById($id) {
+        $this->db->query('SELECT * FROM users WHERE user_id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+    // Get user by username
     public function getUserByName($username) {
         $this->db->query('SELECT * FROM users WHERE user_name = :username');
         $this->db->bind(':username', $username);
@@ -51,6 +58,13 @@ class User {
         }
 
     }
+    // Get all posts by user
+    public function getPostsByUser($id) {
+        $this->db->query('SELECT * FROM posts WHERE user_id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->resultSet();
+    }
+
 
     //Find user by email. Email is passed in by the Controller.
     public function findUserByEmail($email) {
@@ -66,5 +80,31 @@ class User {
         } else {
             return false;
         }
+        
     }
+
+    //update avatar 
+    public function update_avatar($avatarName) 
+    {
+        $this->db->query('UPDATE users SET user_photo = :avatarName WHERE user_id = :id');
+        $this->db->bind(':avatarName', $avatarName);
+        $this->db->bind(':id', $_SESSION['user_id']);
+        $this->db->execute();
+    }
+
+    // update user profile
+    public function update_profile($data)
+    {   
+        $this->db->query('UPDATE users SET user_fullname = :fullname, user_email = :email, user_birthday = :birthday, user_address = :address, user_phone = :phone WHERE user_id = :id');
+        //Bind values
+        $this->db->bind(':id', $data['user_id']);
+        $this->db->bind(':fullname', $data['fullname']);
+        $this->db->bind(':email', $data['email']);
+        $this->db->bind(':birthday', $data['birthday']);
+        $this->db->bind(':address', $data['address']);
+        $this->db->bind(':phone', $data['phone']);
+        $this->db->execute();
+
+    }
+        
 }

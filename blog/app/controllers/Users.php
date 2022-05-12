@@ -1,11 +1,11 @@
 <?php
+    require_once '../app/helpers/session_helper.php';
+?>
+<?php
 class Users extends Controller {
     public function __construct() {
         $this->userModel = $this->model('User');
     }
-
-
-
 
     public function register() {
         $data = [
@@ -174,4 +174,114 @@ class Users extends Controller {
         session_destroy();
         header('location:' . URL_ROOT . '/users/login');
     }
+
+    // profile page
+    public function profile() 
+    {
+        if(!IsLoggedIn())
+        {     
+            header('location: ' . URL_ROOT . '/pages');
+        }
+        $user = $this->userModel->getUserById($_SESSION['user_id']);
+        $post = $this->userModel->getPostsByUser($_SESSION['user_id']);
+        $data = [
+            'title' => 'Profile',
+            'user' => $user,
+            'posts' => $post
+
+        ];
+        $this->view('users/profile', $data);
+    }
+
+    // update profile
+    public function update_profile()
+    {
+        if(!IsLoggedIn())
+        {     
+            header('location: ' . URL_ROOT . '/pages');
+        }
+        $user = $this->userModel->getUserById($_SESSION['user_id']);
+        // Post request
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            
+                                    
+            if(!empty($data['fullname']) && !empty($data['birthday']) && !empty($data['phone']) && !empty($data['address']))
+            {
+                //check value 
+                if(trim($_POST['fullname']) == '')
+                {
+                    $data['fullname'] = $user->user_fullname;
+                }
+                else
+                {
+                    $data['fullname'] = trim($_POST['fullname']);
+                }
+                if(trim($_POST['email']) == '')
+                {
+                    $data['email'] = $user->user_email;
+                }
+                else
+                {
+                    $data['email'] = trim($_POST['email']);
+                }
+                if(trim($_POST['birthday']) == '')
+                {
+                    $data['birthday'] = $user->user_birthday;
+                }
+                else
+                {
+                    $data['birthday'] = trim($_POST['birthday']);
+                }
+                if(trim($_POST['phone']) == '')
+                {
+                    $data['phone'] = $user->user_phone;
+                }
+                else
+                {
+                    $data['phone'] = trim($_POST['phone']);
+                }
+
+                if(trim($_POST['address']) == '')
+                {
+                    $data['address'] = $user->user_address;
+                }
+                else
+                {
+                    $data['address'] = trim($_POST['address']);
+                }
+
+                $data['user_id'] = $_SESSION['user_id'];
+                if($this->userModel->update_profile($data))
+                {
+                    $_SESSION['username'] = $data['fullname'];
+                    $_SESSION['email'] = $data['email'];
+                    $_SESSION['birthday'] = $data['birthday'];
+                    $_SESSION['phone'] = $data['phone'];
+                    $_SESSION['address'] = $data['address'];
+                    header('location: ' . URL_ROOT . '/users/profile');
+                }
+                else
+                {
+                    // catch error
+
+                    die('Something went wrong');
+                }
+            }
+
+        }
+        $data = [
+            'title' => 'Update Profile',
+            'user' => $user,
+            'fullname' => $user->user_fullname,
+            'email' => $user->user_email,
+            'birthday' => $user->user_birthday,
+            'phone' => $user->user_phone,
+            'address' => $user->user_address
+        ];
+        $this->view('users/profile', $data);
+
+    }
+    
 }

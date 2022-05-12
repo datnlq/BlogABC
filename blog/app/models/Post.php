@@ -18,7 +18,7 @@ class Post
     //Get all posts
     public function getAllPosts()
     {
-        $this->db->query('SELECT * FROM posts ORDER BY create_at ASC');
+        $this->db->query('SELECT * FROM posts ORDER BY post_created ASC');
         return  $this->db->resultSet();
         
     }
@@ -26,7 +26,7 @@ class Post
     // Add post
     public function addPost($data)
     {
-        $this->db->query('INSERT INTO posts (user_id, title, body) VALUES(:user_id, :title, :body)');
+        $this->db->query('INSERT INTO posts (user_id, post_title, post_body) VALUES(:user_id, :title, :body)');
         $this->db->bind(':user_id', $data['user_id']);
         $this->db->bind(':title', $data['title']);
         $this->db->bind(':body', $data['body']);
@@ -37,7 +37,7 @@ class Post
     // Update post
     public function updatePost($data)
     {
-        $this->db->query('UPDATE posts SET title = :title, body = :body WHERE id = :id');
+        $this->db->query('UPDATE posts SET post_title = :title, post_body = :body WHERE post_id = :id');
         $this->db->bind(':id', $data['id']);
         $this->db->bind(':title', $data['title']);
         $this->db->bind(':body', $data['body']);
@@ -48,7 +48,7 @@ class Post
     // Delete post
     public function deletePost($id)
     {
-        $this->db->query('DELETE FROM posts WHERE id = :id');
+        $this->db->query('DELETE FROM posts WHERE post_id = :id');
         $this->db->bind(':id', $id);
 
         return $this->db->execute();
@@ -57,7 +57,7 @@ class Post
     // Find post by id
     public function findPostById($id)
     {
-        $this->db->query('SELECT * FROM posts WHERE id = :id');
+        $this->db->query('SELECT * FROM posts WHERE post_id = :id');
         $this->db->bind(':id', $id);
         return $this->db->single();
   
@@ -66,7 +66,7 @@ class Post
     // Get post id
     public function getPostId()
     {
-        $this->db->query('SELECT id FROM posts ORDER BY id DESC LIMIT 1');
+        $this->db->query('SELECT post_id FROM posts ORDER BY post_id DESC LIMIT 1');
         return $this->db->single();
     }
 

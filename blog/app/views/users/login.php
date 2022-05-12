@@ -4,7 +4,8 @@
 
 <div class="navbar">
     <?php
-       require BLOG_ROOT . '/views/includes/navbar.php';
+        require BLOG_ROOT . '/views/includes/navbar.php';
+        require BLOG_ROOT . '/views/includes/navbar.php';
     ?>
 </div>
 

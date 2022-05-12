@@ -82,8 +82,5 @@
         {
             return $this->statement->rowCount();
         }
-
-
-
-        
+       
     }

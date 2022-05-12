@@ -1,5 +1,7 @@
 <?php
-    session_start();
+    require '../app/helpers/session_helper.php';
+?>
+<?php
    require BLOG_ROOT . '/views/includes/header.php';
 ?>
 <div id="section-landing">

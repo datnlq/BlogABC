@@ -19,27 +19,23 @@
 
 
     <?php foreach($data['posts'] as $post): ?>
-        <?php 
-            //Check session to see if user is logged in
-            //var_dump($post);
-            //var_dump($_SESSION);
-            if(isLoggedIn() && $_SESSION['user_id'] == $post->user_id) 
-            {
-                    //If user is the author, show edit and delete buttons
-                    echo '<a class="btn blue" href="' . URL_ROOT . '/posts/update/' . $post->id . '">Edit</a>';
-                    echo '<a class="btn red" href="' . URL_ROOT . '/posts/delete/' . $post->id . '">Delete</a>';
 
-            }
-        ?>
+            <?php if(isLoggedIn() && $_SESSION['user_id'] == $post->user_id): ?>
+                <a class="btn blue" href="<?php echo URL_ROOT . '/posts/update/' . $post->post_id ?>">Edit  </a>
+                <form action="<?php echo URL_ROOT . "/posts/delete/" . $post->post_id ?>" method="POST">
+                    <input type="submit" name="delete" value="Delete" class="btn red">
+                </form>
+
+            <?php endif; ?>
         <div class="card">
             <h2>    
-                <?php echo $post->title; ?> 
+                <?php echo $post->post_title; ?> 
             </h2>
             <h3>
-                <?php echo 'Created on: ' .date('F j h:m', strtotime($post->create_at)) ?>
+                <?php echo 'Created on: ' .date('F j h:m', strtotime($post->post_created)) ?>
             </h3>
             <p>
-                <?php echo $post->body; ?>
+                <?php echo $post->post_body; ?>
             </p>
 
         </div>
